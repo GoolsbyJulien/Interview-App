@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .App-logo {
@@ -28,10 +31,50 @@
   color: #61dafb;
 }
 
+.name {
+  font-size: 90px;
+}
+
+.name h1 {
+  font-size: 90px;
+  text-align: center;
+  margin: 0;
+}
+
+.name nav {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+}
+
+body {
+  font-size: 100%;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+h2 {
+  font-size: 1.875em;
+}
+
+p {
+  font-size: 0.875em;
+}
+
+li {
+  margin: 0 10px;
+  display: inline-block;
+  list-style-type: none;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
