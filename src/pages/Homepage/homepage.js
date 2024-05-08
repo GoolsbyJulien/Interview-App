@@ -1,4 +1,4 @@
-import QuestionPanel from "../../components/QuesionPanel/QuestionPanel";
+import QuestionPanel from "../../components/QuestionPanel/QuestionPanel";
 import WebCamGetter from "../../components/Webcam/Webcam";
 
 export default function Homepage() {

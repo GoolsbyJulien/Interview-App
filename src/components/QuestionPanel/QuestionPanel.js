@@ -1,5 +1,4 @@
 import React, { useImperativeHandle, useState, forwardRef, useRef } from "react";
-import sound from "../../assets/test.wav"
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import styles from './QuestionPanel.module.css';
 const QuestionPanel = () => {
@@ -54,8 +53,14 @@ const SpeechButton = ({ listening, resetTranscript, timerRef }) => {
             SpeechRecognition.stopListening()
         }
     };
-    return (<button style={{ backgroundColor: listening ? "rgb(241, 69, 118)" : "rgb(52, 137, 255)" }} className={styles.speechButton}
-        onClick={onClick}>{listening ? "Done" : "Answer"}</button>);
+    return (
+        <button
+
+            style={{ backgroundColor: listening ? "rgb(241, 69, 118)" : "rgb(52, 137, 255)" }} className={styles.speechButton}
+            onClick={onClick}>{listening ? "Done" : "Answer"}
+
+        </button>
+    );
 
 
 }
