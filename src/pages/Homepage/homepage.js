@@ -24,7 +24,7 @@ export default function Homepage() {
             <WebCamGetter />
             <QuestionPanel question={question} questionNumber={roundManager.round + 1} changeQuestion={(answer) => {
                 setQuestion(roundManager.getNextQuestion(answer));
-                if (roundManager.round >= NUM_OF_QUESTIONS )
+                if (roundManager.round >= NUM_OF_QUESTIONS)
                     navigate("/review");
             }} />
         </div>
