@@ -1,13 +1,27 @@
-import React, { useImperativeHandle, useState, forwardRef, useRef } from "react";
+import React, { useImperativeHandle, useState, forwardRef, useRef, useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import styles from './QuestionPanel.module.css';
 import { useNavigate } from 'react-router-dom';
 import { NUM_OF_QUESTIONS } from "../../classes/Round";
 
 
+
+
 const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
     const timerRef = useRef(null);
     const navigate = useNavigate();
+
+
+    /*
+        0: Waiting for question
+        1:Listening
+        2:Question Answered
+        3:
+
+    */
+    let state = 0;
+
+
 
     const {
         transcript,
@@ -20,12 +34,18 @@ const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
         return <span>Browser doesn't support speech recognition.</span>;
     }
 
+    if (listening)
+        state = 1;
+
+    if (!listening && transcript != "")
+        state = 2;
 
     return (
         <div className={styles.questionPanel}>
 
 
             <div>
+                <div> {state}</div>
                 <Timer ref={timerRef} />
                 <h2>
                     {question}
@@ -33,24 +53,26 @@ const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
                     <span className={styles.questionCounter}>Question {questionNumber}/{NUM_OF_QUESTIONS}</span>
                 </h2>
 
-                <p>{transcript != "" ? transcript : "Answer"}</p>
+                <p>{state != 0 ? transcript : "Answer"}</p>
             </div>
             <div className={styles.controls}>
-                <button onClick={() => changeQuestion(transcript)}> ChangeQuestion</button >
-                <button onClick={() => navigate("/review")}> Review</button >
 
-                <SpeechButton listening={listening} resetTranscript={resetTranscript} timerRef={timerRef} />
+
+                <SpeechButton state={state} resetTranscript={resetTranscript} timerRef={timerRef} />
+                <button disabled={state!=2} className={styles.nextButton} onClick={() => { resetTranscript(); changeQuestion(transcript) }}>Next ➔</button >
+
             </div>
         </div >
     );
 };
 
-const SpeechButton = ({ listening, resetTranscript, timerRef }) => {
+const SpeechButton = ({ state, resetTranscript, timerRef }) => {
 
 
     const onClick = () => {
 
-        if (!listening) {
+        if (state == 0 || state == 2) {
+            window.speechSynthesis.cancel();
             timerRef.current.handleStart();
             resetTranscript(); SpeechRecognition.startListening({ continuous: true });
             console.log("Recording...");
@@ -64,11 +86,29 @@ const SpeechButton = ({ listening, resetTranscript, timerRef }) => {
             SpeechRecognition.stopListening()
         }
     };
+
+    let buttonColor = "rgb(52, 137, 255)";
+    let buttonText = "";
+
+
+    if (state == 0) {
+        buttonText = "Answer";
+        buttonColor = "rgb(52, 137, 255)";
+
+    }
+    if (state == 1) {
+        buttonText = "Done";
+        buttonColor = "rgb(241, 69, 118)";
+
+    }
+    if (state == 2)
+        buttonText = "Redo";
     return (
         <button
-
-            style={{ backgroundColor: listening ? "rgb(241, 69, 118)" : "rgb(52, 137, 255)" }} className={styles.speechButton}
-            onClick={onClick}>{listening ? "Done" : "Answer"}
+            style={{ backgroundColor: buttonColor }}
+            className={styles.speechButton}
+            onClick={onClick}>
+            {buttonText}
 
         </button>
     );
@@ -112,6 +152,8 @@ const Timer = forwardRef((props, ref) => {
 
     return <p className={styles.timer} > {timer}</p >;
 });
+
+
 
 export default QuestionPanel;
 

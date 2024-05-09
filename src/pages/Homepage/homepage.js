@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { loadQuestion } from "../../classes/QuestionLoader";
 import QuestionPanel from "../../components/QuestionPanel/QuestionPanel";
 import WebCamGetter from "../../components/Webcam/Webcam";
@@ -7,10 +7,13 @@ import { getRoundManager } from "../../Global";
 export default function Homepage() {
 
     const [question, setQuestion] = useState(loadQuestion);
-
-
     let roundManager = getRoundManager();
 
+    useEffect(() => {
+
+        textToSpeech(question);
+
+    }, [question]);
 
     return (
 
@@ -19,4 +22,15 @@ export default function Homepage() {
             <QuestionPanel question={question} questionNumber={roundManager.round + 1} changeQuestion={(answer) => { setQuestion(roundManager.getNextQuestion(answer)) }} />
         </div>
     );
+}
+
+function textToSpeech(text) {
+
+
+    window.speechSynthesis.cancel();
+    const msg = new SpeechSynthesisUtterance();
+    msg.voice = window.speechSynthesis.getVoices()[5];
+    msg.text = text;
+    window.speechSynthesis.speak(msg);
+
 }

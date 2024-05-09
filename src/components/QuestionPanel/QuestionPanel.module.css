@@ -20,6 +20,27 @@
     align-items: center;
 }
 
+
+
+.nextButton {
+
+    vertical-align: middle;
+    float: right;
+    margin-left: 1em;
+    background-color: rgb(44, 84, 51);
+    /* Move the button to the right */
+    vertical-align: middle;
+    text-align: center;
+    color: white;
+    padding: 1%;
+    font-size: 0.875em;
+    border-radius: 20px;
+    border: none;
+}
+
+.nextButton:disabled {
+    color: rgb(164, 164, 164) !important;
+}
 .timer {
     float: right;
     margin: 0;

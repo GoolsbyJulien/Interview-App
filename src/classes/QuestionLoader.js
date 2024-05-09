@@ -1,14 +1,14 @@
+import { textToSpeech } from "../pages/Homepage/homepage";
 
 
 
 export function loadQuestion() {
-
     let i = Math.floor(Math.random() * questions.length);;
-    console.log("Loading Question");
-
-    return questions[i];
 
 
+    let question = questions[i];
+
+    return question;
 }
 const questions = [
     // Behavioral Questions
