@@ -1,8 +1,13 @@
 import React, { useImperativeHandle, useState, forwardRef, useRef } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import styles from './QuestionPanel.module.css';
-const QuestionPanel = () => {
+import { useNavigate } from 'react-router-dom';
+import { NUM_OF_QUESTIONS } from "../../classes/Round";
+
+
+const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
     const timerRef = useRef(null);
+    const navigate = useNavigate();
 
     const {
         transcript,
@@ -22,12 +27,18 @@ const QuestionPanel = () => {
 
             <div>
                 <Timer ref={timerRef} />
-                <h2> Can you please tell me a bit about yourself?
+                <h2>
+                    {question}
+
+                    <span className={styles.questionCounter}>Question {questionNumber}/{NUM_OF_QUESTIONS}</span>
                 </h2>
 
                 <p>{transcript != "" ? transcript : "Answer"}</p>
             </div>
             <div className={styles.controls}>
+                <button onClick={() => changeQuestion(transcript)}> ChangeQuestion</button >
+                <button onClick={() => navigate("/review")}> Review</button >
+
                 <SpeechButton listening={listening} resetTranscript={resetTranscript} timerRef={timerRef} />
             </div>
         </div >

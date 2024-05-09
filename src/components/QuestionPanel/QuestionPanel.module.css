@@ -26,6 +26,14 @@
     color: #858585ee;
 }
 
+.questionCounter {
+
+    font-size: 0.7em;
+    line-height: 1.6;
+    margin: 2em;
+    color: #858585ee;
+}
+
 .speechButton {
     vertical-align: middle;
     float: right;
