@@ -5,22 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { NUM_OF_QUESTIONS } from "../../classes/Round";
 
 
-
+const STATES = {
+    WAITING: 0,
+    LISTENING: 1,
+    ANSWERED: 2
+}
 
 const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
     const timerRef = useRef(null);
-    const navigate = useNavigate();
-
-
-    /*
-        0: Waiting for question
-        1:Listening
-        2:Question Answered
-        3:
-
-    */
-    let state = 0;
-
+    let state = STATES.WAITING;
 
 
     const {
@@ -35,17 +28,15 @@ const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
     }
 
     if (listening)
-        state = 1;
+        state = STATES.LISTENING;
 
-    if (!listening && transcript != "")
-        state = 2;
+    if (!listening && transcript !== "")
+        state = STATES.ANSWERED;
 
     return (
         <div className={styles.questionPanel}>
 
-
             <div>
-                <div> {state}</div>
                 <Timer ref={timerRef} />
                 <h2>
                     {question}
@@ -53,13 +44,13 @@ const QuestionPanel = ({ question, questionNumber, changeQuestion }) => {
                     <span className={styles.questionCounter}>Question {questionNumber}/{NUM_OF_QUESTIONS}</span>
                 </h2>
 
-                <p>{state != 0 ? transcript : "Answer"}</p>
+                <p>{state !== 0 ? transcript : "Answer"}</p>
             </div>
             <div className={styles.controls}>
 
 
                 <SpeechButton state={state} resetTranscript={resetTranscript} timerRef={timerRef} />
-                <button disabled={state!=2} className={styles.nextButton} onClick={() => { resetTranscript(); changeQuestion(transcript) }}>Next ➔</button >
+                <button disabled={state !== 2} className={styles.nextButton} onClick={() => { resetTranscript(); changeQuestion(transcript) }}>Next ➔</button >
 
             </div>
         </div >
@@ -71,17 +62,19 @@ const SpeechButton = ({ state, resetTranscript, timerRef }) => {
 
     const onClick = () => {
 
-        if (state == 0 || state == 2) {
+        if (state === STATES.WAITING || state === STATES.ANSWERED) {
+            timerRef.current.reset();
             window.speechSynthesis.cancel();
-            timerRef.current.handleStart();
-            resetTranscript(); SpeechRecognition.startListening({ continuous: true });
+            timerRef.current.start();
+            resetTranscript();
+            SpeechRecognition.startListening({ continuous: true });
             console.log("Recording...");
         }
         else {
 
             if (timerRef.current.getTime() < 2)
                 return;
-            timerRef.current.handleReset();
+            timerRef.current.pause();
 
             SpeechRecognition.stopListening()
         }
@@ -91,17 +84,17 @@ const SpeechButton = ({ state, resetTranscript, timerRef }) => {
     let buttonText = "";
 
 
-    if (state == 0) {
+    if (state === STATES.WAITING) {
         buttonText = "Answer";
         buttonColor = "rgb(52, 137, 255)";
 
     }
-    if (state == 1) {
+    if (state === STATES.LISTENING) {
         buttonText = "Done";
         buttonColor = "rgb(241, 69, 118)";
 
     }
-    if (state == 2)
+    if (state === STATES.ANSWERED)
         buttonText = "Redo";
     return (
         <button
@@ -122,11 +115,11 @@ const Timer = forwardRef((props, ref) => {
     const [timer, setTimer] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     useImperativeHandle(ref, () => ({
-        handleStart, handleReset, getTime
+        start, reset, pause, getTime
     }));
 
 
-    const handleStart = () => {
+    const start = () => {
         if (isRunning) return;
         setIsRunning(true);
         timeInterval.current = setInterval(() => {
@@ -134,13 +127,13 @@ const Timer = forwardRef((props, ref) => {
         }, 1000);
     }
 
-    const handlePause = () => {
+    const pause = () => {
         if (!isRunning) return;
         setIsRunning(false);
         clearInterval(timeInterval.current);
     }
 
-    const handleReset = () => {
+    const reset = () => {
         setIsRunning(false);
         clearInterval(timeInterval.current);
         setTimer(0);
