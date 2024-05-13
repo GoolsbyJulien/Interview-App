@@ -7,9 +7,6 @@ namespace backend.Controllers;
 public class UserController : ControllerBase
 {
 
-
-
-
     [HttpGet("login")]
     public User Get()
     {

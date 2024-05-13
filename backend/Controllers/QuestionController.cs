@@ -6,13 +6,17 @@ namespace backend.Controllers;
 public class Question : ControllerBase
 {
 
-    [HttpGet("get")]
-    public string loadQuestion()
+    [HttpGet("get{amount}")]
+    public string[] loadQuestion(int amount)
     {
+        string[] questions = new string[amount];
         string[] allLines = System.IO.File.ReadAllLines("./questions.txt");
         Random rnd1 = new Random();
-        Console.WriteLine();
-        return allLines[rnd1.Next(allLines.Length)];
+        Console.WriteLine("loading");
+
+        for (int i = 0; i < amount; i++)
+            questions[i] = allLines[rnd1.Next(allLines.Length)];
+        return questions;
     }
 
 }

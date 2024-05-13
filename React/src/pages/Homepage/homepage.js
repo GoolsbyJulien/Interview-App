@@ -38,6 +38,6 @@ function textToSpeech(text) {
     const msg = new SpeechSynthesisUtterance();
     msg.voice = window.speechSynthesis.getVoices()[5];
     msg.text = text;
-    window.speechSynthesis.speak(msg);
+    //window.speechSynthesis.speak(msg);
 
 }

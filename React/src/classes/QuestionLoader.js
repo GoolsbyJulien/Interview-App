@@ -1,8 +1,13 @@
+import { getQuestions } from "../Server";
 import { textToSpeech } from "../pages/Homepage/homepage";
+import { NUM_OF_QUESTIONS } from "./Round";
+
 
 
 
 export function loadQuestion() {
+
+
     let i = Math.floor(Math.random() * questions.length);;
 
 
@@ -10,6 +15,13 @@ export function loadQuestion() {
 
     return question;
 }
+
+
+export function loadQuestions() {
+
+    return getQuestions(NUM_OF_QUESTIONS);
+}
+
 const questions = [
     // Behavioral Questions
     "Tell me about a time when you had to work with a difficult team member.",
