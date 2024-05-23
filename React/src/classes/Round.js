@@ -18,8 +18,9 @@ export class RoundManager {
             for (let i = 0; i < NUM_OF_QUESTIONS; i++) {
                 this.questions[i] = loadQuestion();
                 this.answers[i] = "NA";
-                return;
             }
+            return;
+
         }
         this.questionPromise = loadQuestions();
         this.questionPromise.then((res) => {
