@@ -7,9 +7,9 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { NUM_OF_QUESTIONS } from "../../classes/Round";
 
 export default function Homepage() {
-
-    const [question, setQuestion] = useState(loadQuestion);
     let roundManager = getRoundManager();
+
+    const [question, setQuestion] = useState(roundManager.questions[0]);
     const navigate = useNavigate();
 
     useEffect(() => {

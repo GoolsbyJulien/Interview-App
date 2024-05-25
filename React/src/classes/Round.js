@@ -23,10 +23,19 @@ export class RoundManager {
 
         }
         this.questionPromise = loadQuestions();
+
         this.questionPromise.then((res) => {
+
+
+            if (res == null) {
+
+                console.error("Sever is offline");
+                return;
+            }
 
             for (let i = 0; i < NUM_OF_QUESTIONS; i++) {
                 this.answers[i] = "NA";
+
 
                 this.questions[i] = (res[i]);
             }

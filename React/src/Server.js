@@ -3,7 +3,7 @@ const SERVER_ADDRESS = "http://localhost:5026";
 
 
 
-export const BYPASS_SERVER = true;
+export const BYPASS_SERVER = false;
 
 export async function getQuestions(amt) {
 
