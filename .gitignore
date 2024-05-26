@@ -22,6 +22,6 @@ bld/
 [Bb]in/
 [Oo]bj/
 
-*.env
-./backend/appsettings.json
-./backend/appsettings.Development.json
+
+backend/appsettings.Development.json
+backend/appsettings.json
