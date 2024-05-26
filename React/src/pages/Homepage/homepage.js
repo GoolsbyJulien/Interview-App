@@ -18,6 +18,7 @@ export default function Homepage() {
 
     }, [question]);
 
+    console.log("dad " + process.env.REACT_APP_TEST);
     return (
 
         <div style={{ height: "100vh", overflow: "hidden" }}>

@@ -12,8 +12,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:3000/",
-                                              "http://www.contoso.com");
+                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader()
+                       .AllowAnyMethod();
                       });
 });
 var app = builder.Build();
@@ -26,8 +26,39 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();
-
+app.UseRequestLogging();
 app.MapControllers();
 app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();
+
+public class RequestLoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public RequestLoggingMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task Invoke(HttpContext context)
+    {
+        context.Request.EnableBuffering();
+        var bodyAsText = await new StreamReader(context.Request.Body).ReadToEndAsync();
+        context.Request.Body.Position = 0;
+
+        Console.WriteLine($"Request Method: {context.Request.Method}");
+        Console.WriteLine($"Request Path: {context.Request.Path}");
+        Console.WriteLine($"Request Body: {bodyAsText}");
+
+        await _next(context);
+    }
+}
+
+public static class RequestLoggingMiddlewareExtensions
+{
+    public static IApplicationBuilder UseRequestLogging(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<RequestLoggingMiddleware>();
+    }
+}

@@ -22,14 +22,13 @@ export class RoundManager {
             return;
 
         }
-        this.questionPromise = loadQuestions();
 
-        this.questionPromise.then((res) => {
+        loadQuestions().then((res) => {
 
 
             if (res == null) {
 
-                console.error("Sever is offline");
+                console.warn("Sever is offline");
                 return;
             }
 
