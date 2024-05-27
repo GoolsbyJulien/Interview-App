@@ -1,15 +1,16 @@
+
+
+
 const SERVER_ADDRESS = "http://localhost:5026";
 
 
 
 
-export const BYPASS_SERVER = false;
-
 export async function getQuestions(amt) {
 
     var questions = [];
 
-    var response = await fetch(locate("questions/get" +  amt), {
+    var response = await fetch(locate("questions/get" + amt), {
 
     })
         .then(data => {
@@ -42,6 +43,26 @@ export async function getQuestions(amt) {
     return questions;
 
 
+}
+
+
+export async function googleLogin(token) {
+    try {
+        const response = await fetch('http://localhost:5026/auth/google', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Token: token || "-1",
+            })
+        });
+
+        const data = await response.json();
+        return null;
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 function locate(mapping) {
 

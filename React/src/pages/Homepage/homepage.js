@@ -5,6 +5,7 @@ import WebCamGetter from "../../components/Webcam/Webcam";
 import { getRoundManager } from "../../Global";
 import { Navigate, useNavigate } from "react-router-dom";
 import { NUM_OF_QUESTIONS } from "../../classes/Round";
+import { useUser } from "./LoginPage";
 
 export default function Homepage() {
     let roundManager = getRoundManager();

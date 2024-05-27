@@ -25,3 +25,4 @@ bld/
 
 backend/appsettings.Development.json
 backend/appsettings.json
+.env

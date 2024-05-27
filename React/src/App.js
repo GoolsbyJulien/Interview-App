@@ -4,17 +4,22 @@ import Homepage from './pages/Homepage/homepage';
 import ReviewPage from './pages/ReviewPage.js/ReviewPage';
 import { Routes, Route } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import LoginPage from './pages/Homepage/LoginPage';
+import LoginPage, { UserProvider } from './pages/Homepage/LoginPage';
 
 
 
 function App() {
+
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLEID}>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="review" element={<ReviewPage />} />
-      </Routes>
+      <UserProvider>
+
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="review" element={<ReviewPage />} />
+        </Routes>
+      </UserProvider >
+
     </GoogleOAuthProvider>
 
   );

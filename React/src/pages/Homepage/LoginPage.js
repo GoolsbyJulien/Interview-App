@@ -1,39 +1,58 @@
-import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { useAuth } from "../../auth";
 
+// UserContext.js
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
+const UserContext = createContext();
 
-export default function LoginPage() {
+export const UserProvider = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState(null);
 
+    return (
+        <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+            {currentUser ?
+                 children  :
 
-    return <div>
+                <LoginPage />
+            }
+        </UserContext.Provider>
+    );
+};
 
-        <GoogleLogin
-            onSuccess={res => {
-                console.log(res);
-                console.log(res);
-                // Send the token and additional user information to your backend
-                fetch('http://localhost:5026/auth/google', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        Token: res.credential || "-1",
+export const useUser = () => useContext(UserContext);
+function LoginPage() {
+    const [isLoggedIn, setLoggedIn] = useState(false);
+    const { currentUser } = useUser();
+    const { googleLogin } = useAuth();
+    useEffect(() => {
+        const cookie = localStorage.getItem("login");
+        if (cookie) {
+            googleLogin(cookie).then(() => setLoggedIn(true));
+        }
+    }, [googleLogin]);
 
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('User data stored:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }}
-            onError={() => {
-                console.log('Login Failed');
-            }}
-        />
-    </div>
+    const handleLoginSuccess = (res) => {
+        localStorage.setItem("login", res.credential);
+        googleLogin(res.credential).then(() => setLoggedIn(true));
+    };
+    if (!isLoggedIn) {
+        return (
+            <div>
+                <GoogleLogin
+                    onSuccess={handleLoginSuccess}
+                    onError={() => {
+                        console.log('Login Failed');
+                    }}
+                />
+            </div>
+        );
+    } else {
+        return (
+            <div>
 
+                {currentUser.email}
+            </div>
+        );
+    }
 }

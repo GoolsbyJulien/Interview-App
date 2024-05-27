@@ -1,8 +1,6 @@
-import { getRoundManager } from "../../Global";
 import styles from './ReviewPage.module.css';
 
-export default function ReviewPage() {
-    let roundManager = getRoundManager();
+export default function ReviewPage({roundManager}) {
 
 
     return (

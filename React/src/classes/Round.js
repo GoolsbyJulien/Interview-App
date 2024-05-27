@@ -14,7 +14,9 @@ export class RoundManager {
         this.questions = new Array(NUM_OF_QUESTIONS);
         this.answers = new Array(NUM_OF_QUESTIONS);
 
-        if (BYPASS_SERVER) {
+
+
+        if (false) {
             for (let i = 0; i < NUM_OF_QUESTIONS; i++) {
                 this.questions[i] = loadQuestion();
                 this.answers[i] = "NA";
